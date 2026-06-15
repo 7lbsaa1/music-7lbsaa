@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7lbsaa Music</title>
+    <title>7lbsaa Music | Ultimate Sonic Experience</title>
     <style>
-        /* Modern CSS Variables & Design System */
+        /* Immersive Premium Cinematic Theme System */
         :root {
-            --bg-color: #070708;
-            --surface-color: #121214;
-            --accent-color: #ff5353; /* الدرجة اللونية الحمراء المميزة من التصميم */
-            --text-color: #ffffff;
-            --text-muted: #a0a0a5;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --bg-main: #050508;
+            --bg-side: #0a0a0f;
+            --glass-bg: rgba(18, 18, 26, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.04);
+            --accent-glow: #ff3366;
+            --accent-gradient: linear-gradient(135deg, #ff3366 0%, #ff6633 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         * {
@@ -22,567 +25,690 @@
         }
 
         body {
-            font-family: var(--font-main);
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: var(--font-display);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            display: flex;
+            min-height: 100vh;
         }
 
-        /* شريط التمرير الاحترافي */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #252528;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-color);
-        }
-
-        /* النافبار الـ Navigation / Header */
-        header {
+        /* Glowing Background Orbs Animation */
+        .ambient-glow {
             position: fixed;
-            top: 0;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -200px;
+            right: -100px;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatGlow 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-80px, 50px) scale(1.2); }
+        }
+
+        /* Custom Modern Left Sidebar Layout (Pure App Experience) */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-side);
+            border-right: 1px solid var(--glass-border);
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: fixed;
+            height: 100vh;
             left: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(7, 7, 8, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            top: 0;
+            z-index: 100;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .logo {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            color: var(--text-color);
+            gap: 12px;
             text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
         }
 
-        .logo-icon {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, var(--accent-color), #ff8080);
+        .brand-logo-glow {
+            width: 14px;
+            height: 14px;
+            background: var(--accent-gradient);
             border-radius: 50%;
-            display: inline-block;
+            box-shadow: 0 0 15px var(--accent-glow);
             position: relative;
         }
 
-        .logo-icon::after {
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-item a:hover, .menu-item.active a {
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transform: translateX(4px);
+        }
+
+        .menu-item svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            transition: stroke 0.3s;
+        }
+
+        .menu-item:hover svg, .menu-item.active svg {
+            stroke: #ff3366;
+        }
+
+        /* Main Content Container Layout */
+        .main-wrapper {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 60px 140px 60px; /* Space for Bottom Player Bar */
+            z-index: 1;
+            width: calc(100% - 280px);
+        }
+
+        /* Cinematic Hero Banner */
+        .hero-banner {
+            position: relative;
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.4) 0%, rgba(15, 23, 42, 0.4) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            margin-bottom: 60px;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-banner::before {
             content: '';
             position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--bg-color);
-            border-radius: 50%;
-            top: 9px;
-            left: 9px;
+            inset: 0;
+            background: radial-gradient(circle at 80% 50%, rgba(255, 51, 102, 0.15), transparent 50%);
+            pointer-events: none;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
+        .hero-text {
+            max-width: 550px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-color);
-        }
-
-        .nav-actions {
-            display: flex;
+        .badge {
+            display: inline-flex;
             align-items: center;
-            gap: 20px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-
-        .icon-btn:hover {
-            transform: scale(1.1);
-            color: var(--accent-color);
-        }
-
-        /* السلايد 1: الهيرو سيكشن (Hero Section) */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px 60px 20px;
-            position: relative;
-        }
-
-        .hero-content {
-            flex: 1;
-            max-width: 600px;
-            z-index: 2;
-        }
-
-        .hero-title {
-            font-size: 5rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-
-        .hero-subtitle {
-            font-size: 3.5rem;
-            color: var(--accent-color);
-            font-weight: 700;
+            gap: 6px;
+            background: rgba(255, 51, 102, 0.1);
+            border: 1px solid rgba(255, 51, 102, 0.2);
+            color: #ff477e;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
             margin-bottom: 20px;
         }
 
-        .hero-description {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 40px;
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            letter-spacing: -1.5px;
+            background: linear-gradient(to right, #fff 40%, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .btn-primary {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--text-color);
-            padding: 16px 40px;
-            font-size: 1rem;
+        .hero-subtitle {
+            font-size: 1.8rem;
             font-weight: 600;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s, transform 0.3s;
-            box-shadow: 0 10px 20px rgba(255, 83, 83, 0.2);
+            color: var(--text-secondary);
+            margin-bottom: 24px;
         }
 
-        .btn-primary:hover {
-            background-color: #e04444;
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn-glass {
+            background: var(--accent-gradient);
+            color: var(--text-primary);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 24px rgba(255, 51, 102, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-glass:hover {
             transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 51, 102, 0.45);
         }
 
-        .hero-image-container {
-            flex: 1;
+        /* Hero Artistic Rotating Interactive Media Cover */
+        .hero-media {
+            position: relative;
+            width: 320px;
+            height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            z-index: 1;
         }
 
-        /* دائرة مضيئة ومتحركة حول الصورة الشخصية كبديل متطور لتصميم السماعة */
-        .profile-img-wrapper {
+        .vinyl-container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
-            padding: 5px;
-            background: linear-gradient(45deg, var(--accent-color), transparent, var(--accent-color));
-            animation: rotateGlow 10s linear infinite;
+            background: #000;
+            border: 8px solid #111;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(255, 51, 102, 0.2);
+            overflow: hidden;
+            animation: spinVinyl 20s linear infinite;
         }
 
-        .hero-profile-img {
+        .vinyl-art {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 50%;
-            background-color: #1a1a1c;
-            display: block;
-            animation: counterRotate 10s linear infinite;
+            opacity: 0.85;
         }
 
-        @keyframes rotateGlow {
+        .vinyl-center {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-main);
+            border: 4px solid #000;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        @keyframes spinVinyl {
             100% { transform: rotate(360deg); }
         }
-        @keyframes counterRotate {
-            100% { transform: rotate(-360deg); }
-        }
 
-        /* السلايد 2: قسم المطربين (Singers Section) */
-        .singers-section {
-            padding: 100px 20px;
-            background-color: var(--surface-color);
+        /* Artists Streaming Section */
+        .section-container {
             position: relative;
+            margin-bottom: 60px;
         }
 
-        .section-header {
-            max-width: 1200px;
-            margin: 0 auto 60px auto;
-            text-align: right; 
+        .section-heading-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
             direction: rtl;
         }
 
         .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-color);
-            position: relative;
-            display: inline-block;
-            padding-bottom: 15px;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to left, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 60px;
-            height: 4px;
-            background-color: var(--accent-color);
-            border-radius: 2px;
-        }
-
-        .singers-grid {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Grid Layout Upgrade - Immersive Glass Trackers */
+        .artists-deck {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 24px;
         }
 
-        /* تصميم الكروت بتأثير إنميشن احترافي عند الاسكرول (Fade-in with Slide-up) */
-        .singer-card {
-            background-color: var(--bg-color);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
+        .artist-node {
+            background: rgba(15, 15, 22, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
             cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
         }
 
-        /* الكلاس يتم إضافته عبر الـ JavaScript عند ظهور العنصر على الشاشة */
-        .singer-card.visible {
+        .artist-node.loaded {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .singer-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border-color: rgba(255, 83, 83, 0.3);
+        .artist-node:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 51, 102, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.5);
         }
 
-        .img-container {
-            width: 100%;
-            height: 320px;
+        .avatar-portal {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 18px auto;
+            border-radius: 50%;
             overflow: hidden;
             position: relative;
+            border: 3px solid transparent;
+            background: linear-gradient(var(--bg-main), var(--bg-main)) padding-box, var(--accent-gradient) border-box;
+            transition: transform 0.4s ease;
         }
 
-        .singer-img {
+        .artist-node:hover .avatar-portal {
+            transform: scale(1.05) rotate(3deg);
+        }
+
+        .avatar-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s ease;
         }
 
-        .singer-card:hover .singer-img {
-            transform: scale(1.08);
-        }
-
-        .singer-overlay {
+        .play-overlay-btn {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(7,7,8,0.9) 20%, rgba(7,7,8,0) 70%);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .artist-node:hover .play-overlay-btn {
+            opacity: 1;
+        }
+
+        .play-icon-svg {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .artist-node:hover .play-icon-svg {
+            transform: scale(1);
+        }
+
+        .node-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            transition: color 0.3s;
+        }
+
+        .artist-node:hover .node-name {
+            color: #ff3366;
+        }
+
+        .node-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Glass Floating Player Bar Bottom Dashboard */
+        .player-dashboard {
+            position: fixed;
+            bottom: 24px;
+            left: 320px;
+            right: 40px;
+            height: 90px;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            animation: slideUpPlayer 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpPlayer {
+            0% { transform: translateY(120px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .track-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 25%;
+        }
+
+        .track-art-mini {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--glass-border);
+        }
+
+        .track-info-mini h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .track-info-mini p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .playback-engine {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            padding: 25px;
-        }
-
-        .singer-name {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .singer-role {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            letter-spacing: 0.5px;
-        }
-
-        /* السلايد 3: الفوتر (Footer) مدمج به صورتك الشخصية */
-        footer {
-            background-color: #0c0c0e;
-            padding: 80px 20px 30px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
             align-items: center;
-            gap: 40px;
-            margin-bottom: 50px;
+            gap: 8px;
+            width: 50%;
         }
 
-        .footer-brand {
-            max-width: 400px;
-        }
-
-        .footer-desc {
-            color: var(--text-muted);
-            margin-top: 15px;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .footer-profile-preview {
+        .engine-controls {
             display: flex;
             align-items: center;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
+            gap: 24px;
         }
 
-        .footer-avatar {
-            width: 70px;
-            height: 70px;
+        .engine-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .engine-btn:hover {
+            color: var(--text-primary);
+            transform: scale(1.05);
+        }
+
+        .engine-btn.master-play {
+            width: 38px;
+            height: 38px;
+            background: #fff;
+            color: #000;
             border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .footer-profile-info h4 {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+        .engine-btn.master-play:hover {
+            transform: scale(1.1);
+            background: #ff3366;
+            color: #fff;
         }
 
-        .footer-profile-info p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        .timeline-slider-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            font-size: 0.85rem;
+        .slider-track {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
         }
 
-        /* Responsive Design التجاوب مع الشاشات المختلفة */
-        @media (max-width: 900px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                justify-content: center;
-                padding-top: 140px;
-            }
-            .hero-content {
-                margin-bottom: 50px;
-            }
-            .hero-title {
-                font-size: 3.5rem;
-            }
-            .hero-subtitle {
-                font-size: 2.5rem;
-            }
-            .profile-img-wrapper {
-                width: 300px;
-                height: 300px;
-            }
-            .section-header {
-                text-align: center;
-            }
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-profile-preview {
-                flex-direction: column;
-            }
+        .slider-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 35%;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .volume-audio-hub {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: flex-end;
+            width: 25%;
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive UI System */
+        @media (max-width: 1024px) {
+            .sidebar { width: 80px; padding: 30px 10px; align-items: center; }
+            .brand span, .menu-item span { display: none; }
+            .main-wrapper { margin-left: 80px; width: calc(100% - 80px); padding: 30px; }
+            .player-dashboard { left: 110px; right: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner { flex-direction: column-reverse; text-align: center; padding: 40px 24px; }
+            .hero-media { margin-bottom: 30px; }
+            .hero-title { font-size: 2.5rem; }
+            .player-dashboard { display: none; }
+            .main-wrapper { padding-bottom: 40px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="nav-container">
-            <div class="nav-actions">
-                <button class="icon-btn" aria-label="Cart">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+    <div class="ambient-glow"></div>
+
+    <!-- Navigation Sidebar Layout -->
+    <nav class="sidebar">
+        <a href="#" class="brand">
+            <div class="brand-logo-glow"></div>
+            <span>7lbsaa Music</span>
+        </a>
+        <ul class="sidebar-menu">
+            <li class="menu-item active">
+                <a href="#home">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                    <span>Home Hub</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#singers">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                    <span>Artists</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+        
+        <!-- Showcase Hero -->
+        <header class="hero-banner" id="home">
+            <div class="hero-text">
+                <div class="badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right:4px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                    Streaming Live
+                </div>
+                <h1 class="hero-title">7lbsaa Music</h1>
+                <div class="hero-subtitle">Enjoy Premium Acoustics</div>
+                <button class="btn-glass" onclick="document.getElementById('singers').scrollIntoView();">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Listen Now
                 </button>
             </div>
-            <ul class="nav-links">
-                <li><a href="#store">Store</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#home" class="active">Home</a></li>
-            </ul>
-            <a href="#" class="logo">
-                7lbsaa Music
-                <span class="logo-icon"></span>
-            </a>
-        </div>
-    </header>
-
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1 class="hero-title">Discover</h1>
-            <div class="hero-subtitle">7lbsaa Music</div>
-            <p class="hero-description">
-                Enjoy a premium world-class sonic experience. Immerse yourself in precise web acoustics, customized playlists, and sleek layouts designed for deep focus and ultimate entertainment.
-            </p>
-            <a href="#singers" class="btn-primary">Listen Now</a>
-        </div>
-        <div class="hero-image-container">
-            <div class="profile-img-wrapper">
-                <img src="https://yt3.googleusercontent.com/nAoVD7ZAy08bqajW8V4o4t0tdYgRakd_jrwaBa_MkKi4K8HGShqOy0Vi0uezjsPH67dKPEXfxQU=s900-c-k-c0x00ffffff-no-rj" alt="7lbsaa Studio Cover" class="hero-profile-img">
-            </div>
-        </div>
-    </section>
-
-    <section class="singers-section" id="singers">
-        <div class="section-header">
-            <h2 class="section-title">استمع إلى أفضل المطربين</h2>
-        </div>
-        <div class="singers-grid" id="singersGrid">
-            </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-profile-preview">
-                <img src="https://yt3.googleusercontent.com/nAoVD7ZAy08bqajW8V4o4t0tdYgRakd_jrwaBa_MkKi4K8HGShqOy0Vi0uezjsPH67dKPEXfxQU=s900-c-k-c0x00ffffff-no-rj" alt="7lbsaa Developer Profile" class="footer-avatar">
-                <div class="footer-profile-info">
-                    <h4>7lbsaa Streaming Hub</h4>
-                    <p>Offline-First Architecture</p>
+            <div class="hero-media">
+                <div class="vinyl-container">
+                    <img src="https://yt3.googleusercontent.com/nAoVD7ZAy08bqajW8V4o4t0tdYgRakd_jrwaBa_MkKi4K8HGShqOy0Vi0uezjsPH67dKPEXfxQU=s900-c-k-c0x00ffffff-no-rj" alt="Brand Art" class="vinyl-art">
+                    <div class="vinyl-center"></div>
                 </div>
             </div>
-            <div class="footer-brand">
-                <a href="#" class="logo" style="margin-bottom: 15px; display: inline-flex;">7lbsaa Music</a>
-                <p class="footer-desc">A premium ecosystem built perfectly with robust architectures, high fidelity performance assets, and immersive user experiences.</p>
+        </header>
+
+        <!-- Artists Grid -->
+        <section class="section-container" id="singers">
+            <div class="section-heading-row">
+                <h2 class="section-title">استمع إلى أفضل المطربين</h2>
+            </div>
+            <div class="artists-deck" id="artistsContainer"></div>
+        </section>
+
+    </main>
+
+    <!-- Floating Dashboard Audio Player Bar -->
+    <div class="player-dashboard">
+        <div class="track-profile">
+            <img src="https://yt3.googleusercontent.com/nAoVD7ZAy08bqajW8V4o4t0tdYgRakd_jrwaBa_MkKi4K8HGShqOy0Vi0uezjsPH67dKPEXfxQU=s900-c-k-c0x00ffffff-no-rj" alt="Current Play" class="track-art-mini" id="playerCurrentArt">
+            <div class="track-info-mini">
+                <h5 id="playerCurrentName">7lbsaa Track</h5>
+                <p id="playerCurrentRole">Select an artist below</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>© 2026 7lbsaa Music. All rights reserved.</p>
+        
+        <div class="playback-engine">
+            <div class="engine-controls">
+                <button class="engine-btn">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                <button class="engine-btn master-play">
+                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <button class="engine-btn">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6zm9-12h2v12h-2z"/></svg>
+                </button>
+            </div>
+            <div class="timeline-slider-bar">
+                <span>01:24</span>
+                <div class="slider-track">
+                    <div class="slider-progress"></div>
+                </div>
+                <span>03:45</span>
+            </div>
         </div>
-    </footer>
 
+        <div class="volume-audio-hub">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+            <div class="slider-track" style="max-width:80px;"><div class="slider-progress" style="width:70%;"></div></div>
+        </div>
+    </div>
+
+    <!-- Interactive Execution Logic -->
     <script>
-        // هيكل بيانات JSON يتضمن تفاصيل الفنانين وروابط الصور المباشرة التي أرسلتها
-        const singersJsonData = `[
+        // Updated JSON dataset including the precise Fairuz WallpaperCave link provided
+        const datasetJSON = `[
             {
-                "id": 1,
                 "name": "Amr Diab",
                 "role": "Pop Legend",
                 "image": "https://imgs.search.brave.com/P6HbdknRvYdaZno2u48zXJiYkLB_q47SVCxe8xTiEe0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hbXJk/aWFiLm5ldC93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8xMC9B/bXJEaWFiX0FxYWJh/XzIxLmpwZw"
             },
             {
-                "id": 2,
                 "name": "Fairuz",
                 "role": "The Golden Voice",
-                "image": "https://imgs.search.brave.com/jJqHcNKa2pUwSUG7IpSh5gCHkt5GBWvOCJv3d8TyvqY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTQ3/NzQ4NDk2L3Bob3Rv/L3BhcmlzLWZyYW5j/ZS1sZWJhbmVzZS1za/W5nZXItZmF5cm91/ei1hd2FyZGVkLWNv/bW1hbmRldXItZGVz/LWFydHMtZXQtZGVz/LWxldHRyZXMtYnkt/ZnJlbmNoLmpwZz9z/PTYxMng2MTImdz0w/JmsDOCTYPE_M0&c=uMVxx-eXq_r0_ifdVU1XiwD1dhS21N9MaRQuRrKNElA="
+                "image": "https://imgs.search.brave.com/XQrSBmXTw_uehBAB6vFgInvFw_P67cgc9t-n5289XOY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDEwMjg0/NTIyLmpwZw"
             },
             {
-                "id": 3,
                 "name": "Tamer Hosny",
                 "role": "Star of Generation",
                 "image": "https://imgs.search.brave.com/LUeg2CmbPgvXymE5ZqnPEh5ypFOaQKxnJhiP9wt_WMg/rs:fit:860:0:0:0/g:ce/aHR0cDovL3d3dy5l/Z3lwdHRvZGF5LmNv/bS9zaXRlaW1hZ2Vz/L0xhcmcvMjAyNDA4/MTQxMTQwNDM0MDQz/LmpwZw"
             },
             {
-                "id": 4,
                 "name": "Elissa",
                 "role": "Queen of Emotion",
                 "image": "https://imgs.search.brave.com/e4aWS_5VFUPZWsKXa5-yrIGd11nt8ctA-NLYbUSVoZ0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNzI1/NzI3NzgvcGhvdG8v/bG9uZG9uLXNpbmdl/ci1lbGlzc2EtcG9z/ZXMtZm9yLWEtcGlj/dHVyZS1iYWNrc3Rh/Z2UtZHVyaW5nLXRo/ZS0yMDA2LXdvcmxk/LW11c2ljLWF3YXJk/cy1hdC1lYXJscy5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/X01qUXM1YzNOWVJx/RExwLUdzQXRSMlJh/VUpVMHZrbzhUWG1O/alFIWGxIOD0"
             }
         ]`;
 
-        // دالة معالجة الـ JSON وبناء الكروت تلقائياً داخل الصفحة
-        function renderSingers() {
-            const grid = document.getElementById('singersGrid');
-            const singers = JSON.parse(singersJsonData);
+        function buildStreamingInterface() {
+            const container = document.getElementById('artistsContainer');
+            const collection = JSON.parse(datasetJSON);
 
-            singers.forEach((singer, index) => {
-                const card = document.createElement('div');
-                card.className = 'singer-card';
-                // تدرج زمني خفيف لظهور الكروت بالتوالي وبشكل جمالي (Stagger effect)
-                card.style.transitionDelay = `${index * 100}ms`;
+            collection.forEach((item, index) => {
+                const node = document.createElement('div');
+                node.className = 'artist-node';
+                node.setAttribute('onclick', `injectActiveTrack('${item.name}', '${item.role}', '${item.image}')`);
                 
-                card.innerHTML = `
-                    <div class="img-container">
-                        <img src="${singer.image}" alt="${singer.name}" class="singer-img" loading="lazy">
-                        <div class="singer-overlay">
-                            <h3 class="singer-name">${singer.name}</h3>
-                            <span class="singer-role">${singer.role}</span>
+                node.innerHTML = `
+                    <div class="avatar-portal">
+                        <img src="${item.image}" alt="${item.name}" class="avatar-img" loading="lazy">
+                        <div class="play-overlay-btn">
+                            <div class="play-icon-svg">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
                         </div>
                     </div>
+                    <div class="node-name">${item.name}</div>
+                    <div class="node-meta">${item.role}</div>
                 `;
-                grid.appendChild(card);
+                
+                container.appendChild(node);
+                
+                // Smooth cascading load-in effect
+                setTimeout(() => {
+                    node.classList.add('loaded');
+                }, index * 80);
             });
         }
 
-        // دالة مراقبة حركة التمرير لتفعيل الإنميشن الاحترافي فور ظهور العناصر على الشاشة
-        function initScrollAnimations() {
-            const cards = document.querySelectorAll('.singer-card');
-            const observerOptions = {
-                root: null,
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // تشغيل الإنميشن مرة واحدة فقط أثناء النزول
-                    }
-                });
-            }, observerOptions);
-
-            cards.forEach(card => observer.observe(card));
+        // Updates bottom player dashboard data dynamically on card click
+        function injectActiveTrack(name, role, imgUrl) {
+            document.getElementById('playerCurrentArt').src = imgUrl;
+            document.getElementById('playerCurrentName').innerText = name;
+            document.getElementById('playerCurrentRole').innerText = role;
         }
 
-        // تشغيل كل الدوال البرمجية بمجرد تحميل الصفحة بالكامل
-        document.addEventListener('DOMContentLoaded', () => {
-            renderSingers();
-            initScrollAnimations();
-        });
+        document.addEventListener('DOMContentLoaded', buildStreamingInterface);
     </script>
 </body>
 </html>
