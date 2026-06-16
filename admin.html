@@ -3,344 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7lbsaa Music — استمع الآن</title>
+<title>لوحة تحكم الموسيقى — إضافة أغنية جديدة</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Tajawal','Inter',sans-serif; background:#0d0d11; color:#fff; min-height:100vh; overflow-x:hidden; }
+  body { font-family:'Tajawal','Inter',sans-serif; background:#0d0d11; color:#fff; min-height:100vh; padding: 40px 20px; }
 
-  nav {
-    position:fixed; top:0; left:0; right:0; z-index:200;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 40px;
-    background:rgba(13, 13, 17, 0.85); backdrop-filter:blur(20px);
-    border-bottom:1px solid rgba(255,255,255,0.06);
+  .admin-container {
+    max-width: 650px;
+    margin: 0 auto;
+    background: #14141f;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   }
-  .nav-logo { font-size:22px; font-weight:900; color:#fff; text-decoration:none; letter-spacing: -0.5px; }
-  .nav-logo span { color:#e85d5d; }
-  .back-btn {
-    display:flex; align-items:center; gap:8px;
-    color:rgba(255,255,255,0.6); text-decoration:none; font-size:14px;
-    transition:all 0.2s ease;
-  }
-  .back-btn:hover { color:#e85d5d; transform: translateX(-3px); }
 
-  .page { display:flex; min-height:100vh; padding-top:70px; }
-
-  .sidebar {
-    width:340px; min-width:300px; flex-shrink:0;
-    background:#12121a; border-left:1px solid rgba(255,255,255,0.06);
-    padding:28px 0; overflow-y:auto;
-    position:sticky; top:70px; height:calc(100vh - 70px);
-  }
-  .sidebar-title {
-    font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
-    color:rgba(255,255,255,0.3); padding:0 24px 16px; text-align: right;
-  }
-  .song-list { display: flex; flex-direction: column; gap: 4px; }
-  .song-item {
-    display:flex; align-items:center; gap:16px;
-    padding:14px 24px; cursor:pointer;
-    transition:all 0.25s ease;
-    border-right:4px solid transparent;
-    text-align: right;
-  }
-  .song-item:hover { background:rgba(255,255,255,0.03); }
-  .song-item.active { background:rgba(232,93,93,0.09); border-right-color:#e85d5d; }
-  .song-thumb {
-    width:50px; height:50px; border-radius:12px; object-fit:cover; flex-shrink:0;
-    border:1px solid rgba(255,255,255,0.1);
-  }
-  .song-meta { flex:1; min-width:0; }
-  .song-name { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#f3f3f6; }
-  .song-singer { font-size:12px; color:rgba(255,255,255,0.5); margin-top:4px; }
+  h1 { font-size: 26px; font-weight: 900; margin-bottom: 8px; color: #fff; }
+  h1 span { color: #e85d5d; }
   
-  .now-playing-dot {
-    width:8px; height:8px; border-radius:50%; background:#e85d5d;
-    flex-shrink:0; display:none;
-    box-shadow: 0 0 10px #e85d5d;
-    animation:blink 1.4s ease-in-out infinite;
-  }
-  .song-item.active .now-playing-dot { display:block; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  p.subtitle { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 32px; }
 
-  .content { flex:1; display:flex; flex-direction:column; background: #0d0d11; }
+  .form-group { margin-bottom: 24px; text-align: right; }
 
-  .player-area {
-    display:grid; grid-template-columns: 360px 1fr;
-    gap:48px; padding:40px; align-items:start;
+  label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.8); }
+
+  input[type="text"], input[type="number"], textarea {
+    width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+    color: #fff; font-family: inherit; font-size: 14px; transition: all 0.25s ease; outline: none;
   }
 
-  .player-card {
-    background:#14141f; border-radius:28px;
-    border:1px solid rgba(255,255,255,0.06);
-    overflow:hidden; position:sticky; top:110px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    border-color: #e85d5d; background: rgba(232,93,93,0.03); box-shadow: 0 0 10px rgba(232,93,93,0.1);
   }
-  .player-cover { position:relative; aspect-ratio:1; overflow:hidden; margin: 16px; border-radius: 20px; }
-  .player-cover img {
-    width:100%; height:100%; object-fit:cover;
-    display:block; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .player-cover img.spinning { animation:spin-slow 25s linear infinite; }
-  @keyframes spin-slow { from{transform:scale(1.02) rotate(0deg)} to{transform:scale(1.02) rotate(360deg)} }
 
-  .player-body { padding:0 24px 24px 24px; }
-  .song-info-display { margin-bottom:20px; text-align: center; }
-  .disp-title { font-size:22px; font-weight:800; letter-spacing:-0.5px; color: #fff; }
-  .disp-artist { font-size:14px; color:#e85d5d; font-weight:500; margin-top:6px; }
+  textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
 
-  .prog-wrap { margin-bottom:18px; }
-  .prog-outer {
-    width:100%; height:6px; background:rgba(255,255,255,0.08);
-    border-radius:4px; cursor:pointer; position:relative; margin-bottom:8px;
-    user-select:none; transition: height 0.1s;
-  }
-  .prog-outer:hover { height: 8px; }
-  .prog-inner {
-    height:100%; background: linear-gradient(90deg, #e85d5d, #ff7676); border-radius:4px;
-    width:0%; pointer-events:none;
-  }
-  .prog-thumb {
-    position:absolute; top:50%; left:0%;
-    width:14px; height:14px; border-radius:50%;
-    background:#fff; border:3px solid #e85d5d;
-    transform:translate(-50%,-50%);
-    opacity:0; transition:opacity 0.15s;
-    pointer-events:none; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  }
-  .prog-outer:hover .prog-thumb { opacity:1; }
-  .time-row { display:flex; justify-content:space-between; font-size:12px; color:rgba(255,255,255,0.4); font-family: 'Inter'; }
+  .hint { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 6px; }
 
-  .controls { display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:20px; }
-  .ctrl-btn {
-    background:none; border:none; cursor:pointer;
-    color:rgba(255,255,255,0.5); padding:8px;
-    display:flex; align-items:center; justify-content:center;
-    transition:all 0.2s ease; border-radius:50%;
+  .submit-btn {
+    width: 100%; padding: 16px; background: #e85d5d; border: none; border-radius: 14px;
+    color: #fff; font-size: 16px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(232,93,93,0.3); transition: all 0.2s ease; margin-top: 10px;
   }
-  .ctrl-btn:hover { color:#fff; transform:scale(1.15); }
-  .ctrl-btn.active { color:#e85d5d; background: rgba(232,93,93,0.1); }
-  .ctrl-btn svg { width:22px; height:22px; }
-  
-  .play-btn {
-    width:56px; height:56px; border-radius:50%;
-    background:#e85d5d; border:none; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 8px 24px rgba(232,93,93,0.4);
-    transition:all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .play-btn:hover { transform:scale(1.1); box-shadow:0 12px 28px rgba(232,93,93,0.5); }
-  .play-btn svg { width:24px; height:24px; fill:#fff; transition: transform 0.1s; }
-  .play-btn .pi { display:block; transform: translateX(-2px); } .play-btn .pau { display:none; }
-  .play-btn.playing .pi { display:none; } .play-btn.playing .pau { display:block; transform: translateX(0); }
 
-  .seek-row { display:flex; gap:10px; margin-bottom:18px; }
-  .seek-btn {
-    flex:1; padding:9px 0;
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
-    color:rgba(255,255,255,0.6); border-radius:12px; font-size:12px; font-weight:600;
-    cursor:pointer; transition:all 0.2s ease;
-  }
-  .seek-btn:hover { background:rgba(232,93,93,0.12); color:#e85d5d; border-color:rgba(232,93,93,0.25); }
+  .submit-btn:hover { transform: scale(1.02); box-shadow: 0 12px 28px rgba(232,93,93,0.4); }
 
-  .vol-row { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-  .vol-row svg { width:18px; height:18px; fill:rgba(255,255,255,0.4); flex-shrink:0; }
-  input[type=range] {
-    -webkit-appearance:none; flex:1; height:4px;
-    background:rgba(255,255,255,0.1); border-radius:2px; cursor:pointer; outline:none;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance:none; width:12px; height:12px;
-    border-radius:50%; background:#e85d5d; cursor:pointer; transition: transform 0.1s;
-  }
-  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
-  .vol-val { font-size:12px; color:rgba(255,255,255,0.4); min-width:35px; text-align:left; font-family: 'Inter'; }
+  .submit-btn:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: not-allowed; box-shadow: none; transform: none; }
 
-  .bottom-row { display:flex; align-items:center; gap:12px; }
-  .repeat-label {
-    font-size:12px; color:#e85d5d; background:rgba(232,93,93,0.08);
-    padding:4px 12px; border-radius:20px; border:1px solid rgba(232,93,93,0.15);
-    display:none; font-weight: 500;
-  }
-  .repeat-label.show { display:inline-block; }
+  .status-msg { padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 500; margin-bottom: 24px; display: none; text-align: center; }
+  .status-msg.success { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.2); }
+  .status-msg.error { background: rgba(232, 93, 93, 0.1); color: #e85d5d; border: 1px solid rgba(232, 93, 93, 0.2); }
 
-  .right-details { text-align: right; display: flex; flex-direction: column; justify-content: center; }
-
-  .lyrics-panel {
-    flex:1; padding:40px;
-    border-top:1px solid rgba(255,255,255,0.05);
-  }
-  .lyrics-toggle-row {
-    display:flex; align-items:center; gap:14px; margin-bottom:24px; text-align: right;
-  }
-  .lyrics-toggle-label { font-size:18px; font-weight:700; color: #fff; }
-  .toggle-switch {
-    position:relative; width:46px; height:24px;
-    cursor:pointer; user-select:none;
-  }
-  .toggle-switch input { opacity:0; width:0; height:0; }
-  .toggle-track {
-    position:absolute; inset:0; background:rgba(255,255,255,0.1);
-    border-radius:12px; transition:background 0.25s ease;
-  }
-  .toggle-switch input:checked + .toggle-track { background:#e85d5d; }
-  .toggle-thumb {
-    position:absolute; top:3px; right:3px;
-    width:18px; height:18px; border-radius:50%; background:#fff;
-    transition:transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .toggle-switch input:checked ~ .toggle-thumb { transform:translateX(-22px); }
-
-  .lyrics-box {
-    background:#12121a; border-radius:24px;
-    border:1px solid rgba(255,255,255,0.05);
-    padding:40px; direction:rtl;
-    line-height:2.4; font-size:18px;
-    color:rgba(255,255,255,0.35);
-    max-height:420px; overflow-y:auto;
-    display:none; text-align: center;
-    scroll-behavior:smooth;
-  }
-  .lyrics-box.show { display:block; }
-  .lyric-line { display:block; padding:8px 0; transition:all 0.3s ease; transform: scale(0.95); opacity: 0.5; }
-  .lyric-line.active { color:#fff; font-size:22px; font-weight:800; transform: scale(1); opacity: 1; text-shadow: 0 4px 12px rgba(255,255,255,0.1); }
-  .lyric-line.past { color:rgba(255,255,255,0.15); }
-
-  .no-song {
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:120px 20px; text-align:center; color:rgba(255,255,255,0.3);
-    gap:20px;
-  }
-  .no-song svg { width:64px; height:64px; opacity:0.2; color: #e85d5d; }
-  .no-song p { font-size:16px; font-weight: 500; }
-
-  @media(max-width:940px){
-    .page { flex-direction:column; padding-top: 60px; }
-    .sidebar { width:100%; position:static; height:auto; border-left:none; border-bottom:1px solid rgba(255,255,255,0.06); padding: 20px 0; }
-    .player-area { grid-template-columns:1fr; gap: 30px; padding:24px; }
-    .player-card { position:static; }
-    nav { padding:14px 20px; }
-    .lyrics-panel { padding:24px; }
-    .right-details { text-align: center; align-items: center; }
-  }
+  .view-site-link { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; margin-bottom: 24px; transition: color 0.2s; }
+  .view-site-link:hover { color: #e85d5d; }
 </style>
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="https://7lbsaa1.github.io/music-7lbsaa/">7lbsaa <span>Music</span></a>
-  <a class="back-btn" href="https://7lbsaa1.github.io/music-7lbsaa/">
-    رجوع للرئيسية
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+<div class="admin-container">
+  <!-- تحديث رابط الصفحة الرئيسية -->
+  <a class="view-site-link" href="https://7lbsaa1.github.io/music-7lbsaa/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    الذهاب للموقع الأساسي للموسيقى
   </a>
-</nav>
 
-<div class="page">
-  <aside class="sidebar">
-    <div class="sidebar-title">قائمة التشغيل</div>
-    <div class="song-list" id="playlistContainer">
-       <p style="text-align:center; font-size:12px; color:rgba(255,255,255,0.3)">جاري تحميل الموسيقى...</p>
-    </div>
-  </aside>
+  <h1>لوحة التحكم <span>7lbsaa</span></h1>
+  <p class="subtitle">قم بملء البيانات بالأسفل لنشر أغنية جديدة مباشرة في قاعدة البيانات</p>
 
-  <div class="content">
-    <div id="noSong" class="no-song">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg>
-      <p>اختر أغنية من القائمة للبدء في الاستماع</p>
+  <div id="statusMsg" class="status-msg"></div>
+
+  <form id="uploadForm">
+    <div class="form-group">
+      <label for="songId">معرّف الأغنية (ID رقمي)</label>
+      <input type="number" id="songId" placeholder="مثال: 3 (يستخدم للترتيب في القائمة)" required>
     </div>
 
-    <div id="playerUI" style="display:none; flex-direction:column; flex:1;">
-      <div class="player-area">
-        <div class="player-card">
-          <div class="player-cover">
-            <img id="coverImg" src="" alt="Cover">
-          </div>
-          <div class="player-body">
-            <div class="song-info-display">
-              <div class="disp-title" id="dispTitle">—</div>
-              <div class="disp-artist" id="dispArtist">—</div>
-            </div>
-
-            <div class="prog-wrap">
-              <div class="prog-outer" id="progOuter">
-                <div class="prog-inner" id="progInner"></div>
-                <div class="prog-thumb" id="progThumb"></div>
-              </div>
-              <div class="time-row">
-                <span id="curTime">0:00</span>
-                <span id="totTime">0:00</span>
-              </div>
-            </div>
-
-            <div class="controls">
-              <button class="ctrl-btn" id="b10" title="رجوع 10 ثواني">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="8.5" y="14.5" font-size="5.5" fill="currentColor" font-weight="700">10</text></svg>
-              </button>
-              <button class="play-btn" id="playBtn">
-                <svg class="pi" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <svg class="pau" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-              </button>
-              <button class="ctrl-btn" id="f10" title="تقدم 10 ثواني">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="7" y="14.5" font-size="5.5" fill="currentColor" font-weight="700">10</text></svg>
-              </button>
-            </div>
-
-            <div class="seek-row">
-              <button class="seek-btn" id="b5">⏪ 5ث</button>
-              <button class="seek-btn" id="f30">30ث ⏩</button>
-            </div>
-
-            <div class="vol-row">
-              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-              <input type="range" id="volSlider" min="0" max="100" value="80">
-              <span class="vol-val" id="volVal">80%</span>
-            </div>
-
-            <div class="bottom-row">
-              <button class="ctrl-btn" id="repeatBtn" title="تكرار الأغنية">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/>
-                </svg>
-              </button>
-              <span class="repeat-label" id="repeatLabel">↻ التكرار مفعل</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="right-details">
-          <div style="font-size:11px; color:rgba(255,255,255,0.3); margin-bottom:8px; text-transform:uppercase; letter-spacing:2px;">جاري التشغيل الآن</div>
-          <div style="font-size:36px; font-weight:900; letter-spacing:-1px; margin-bottom:8px;" id="bigTitle">—</div>
-          <div style="font-size:18px; color:#e85d5d; font-weight:500; margin-bottom:24px;" id="bigArtist">—</div>
-          <div style="width:50px; height:3px; background:#e85d5d; border-radius:2px; margin-bottom:24px;"></div>
-          <div style="font-size:14px; color:rgba(255,255,255,0.4); line-height:2;">
-            المسافة (Spacebar) = إيقاف/تشغيل مؤقت<br>
-            الأسهم اليمنى واليسرى (→ ←) = تقديم وتأخير 10 ثواني
-          </div>
-        </div>
-      </div>
-
-      <div class="lyrics-panel">
-        <div class="lyrics-toggle-row">
-          <span class="lyrics-toggle-label">كلمات الأغنية</span>
-          <label class="toggle-switch">
-            <input type="checkbox" id="lyricsToggle">
-            <div class="toggle-track"></div>
-            <div class="toggle-thumb"></div>
-          </label>
-          <span style="font-size:13px; color:rgba(255,255,255,0.4);" id="lyricsHint">اضغط للعرض</span>
-        </div>
-        <div class="lyrics-box" id="lyricsBox"></div>
-      </div>
+    <div class="form-group">
+      <label for="songTitle">اسم الأغنية</label>
+      <input type="text" id="songTitle" placeholder="أدخل اسم الأغنية هنا" required>
     </div>
-  </div>
+
+    <div class="form-group">
+      <label for="songArtist">اسم الفنان / الألبوم</label>
+      <input type="text" id="songArtist" placeholder="مثال: عمرو دياب · أحلى وأحلى" required>
+      <div class="hint">يفضل الفصل بين الفنان والألبوم بعلامة ( · ) للحصول على مظهر متناسق.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="songSrc">رابط ملف الصوت (URL أو مسار الملف)</label>
+      <input type="text" id="songSrc" placeholder="مثال: music/song.mp3 أو رابط سحابي مباشر" required>
+    </div>
+
+    <div class="form-group">
+      <label for="songCover">رابط صورة الغلاف (URL أو مسار الصورة)</label>
+      <input type="text" id="songCover" placeholder="مثال: images/cover.jpg أو رابط ويب مباشر لصورة الغلاف" required>
+    </div>
+
+    <div class="form-group">
+      <label for="songLyrics">كلمات الأغنية (كل سطر في سطر منفصل)</label>
+      <textarea id="songLyrics" placeholder="اكتب أو الصق كلمات الأغنية هنا...&#10;اضغط Enter بعد كل سطر لمزامنة الكلمات بشكل سليم."></textarea>
+    </div>
+
+    <button type="submit" id="submitBtn" class="submit-btn">نشر الأغنية الآن 🚀</button>
+  </form>
 </div>
-
-<audio id="audio" preload="auto"></audio>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCk9l8XNO4y-6qnaOqKsfAKQPbaemOOHrU",
@@ -355,260 +127,49 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const audio = document.getElementById('audio');
-const playBtn = document.getElementById('playBtn');
-const progOuter = document.getElementById('progOuter');
-const progInner = document.getElementById('progInner');
-const progThumb = document.getElementById('progThumb');
-const curTime = document.getElementById('curTime');
-const totTime = document.getElementById('totTime');
-const volSlider = document.getElementById('volSlider');
-const volVal = document.getElementById('volVal');
-const repeatBtn = document.getElementById('repeatBtn');
-const repeatLabel = document.getElementById('repeatLabel');
-const coverImg = document.getElementById('coverImg');
-const dispTitle = document.getElementById('dispTitle');
-const dispArtist = document.getElementById('dispArtist');
-const bigTitle = document.getElementById('bigTitle');
-const bigArtist = document.getElementById('bigArtist');
-const lyricsToggle = document.getElementById('lyricsToggle');
-const lyricsBox = document.getElementById('lyricsBox');
-const lyricsHint = document.getElementById('lyricsHint');
-const noSong = document.getElementById('noSong');
-const playerUI = document.getElementById('playerUI');
-const playlistContainer = document.getElementById('playlistContainer');
+const uploadForm = document.getElementById('uploadForm');
+const statusMsg = document.getElementById('statusMsg');
+const submitBtn = document.getElementById('submitBtn');
 
-let SONGS = [];
-let currentSong = null;
-let isRepeat = false;
-let isDragging = false;
+uploadForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  submitBtn.disabled = true;
+  submitBtn.textContent = "جاري النشر وحفظ البيانات...";
+  
+  statusMsg.style.display = 'none';
+  statusMsg.className = 'status-msg';
 
-function fmt(s) {
-  if (!isFinite(s) || isNaN(s)) return '0:00';
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return m + ':' + (sec < 10 ? '0' : '') + sec;
-}
+  const rawLyrics = document.getElementById('songLyrics').value;
+  const lyricsArray = rawLyrics.split('\n').map(line => line.trim()).filter(line => line !== "");
 
-async function fetchSongsFromFirebase() {
+  const songData = {
+    id: parseInt(document.getElementById('songId').value),
+    title: document.getElementById('songTitle').value.trim(),
+    artist: document.getElementById('songArtist').value.trim(),
+    src: document.getElementById('songSrc').value.trim(),
+    cover: document.getElementById('songCover').value.trim(),
+    lyrics: lyricsArray
+  };
+
   try {
-    // تصحيح طريقة جلب الكولكشن
-    const querySnapshot = await getDocs(collection(db, "songs"));
-    SONGS = [];
+    await addDoc(collection(db, "songs"), songData);
     
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      SONGS.push({
-        id: data.id, 
-        title: data.title,
-        artist: data.artist,
-        src: data.src,
-        cover: data.cover,
-        lyrics: data.lyrics || []
-      });
-    });
-
-    SONGS.sort((a, b) => a.id - b.id);
-    renderPlaylist();
+    statusMsg.textContent = "تم نشر الأغنية بنجاح! ستظهر فورًا في موقعك الأساسي. 🎉";
+    statusMsg.classList.add('success');
+    statusMsg.style.display = 'block';
+    
+    uploadForm.reset();
   } catch (error) {
-    console.error("Error fetching songs: ", error);
-    playlistContainer.innerHTML = `<p style="text-align:center; font-size:12px; color:#e85d5d">فشل تحميل الأغاني من السيرفر.</p>`;
-  }
-}
-
-function renderPlaylist() {
-  if(SONGS.length === 0) {
-     playlistContainer.innerHTML = `<p style="text-align:center; font-size:12px; color:rgba(255,255,255,0.3)">لا توجد أغاني متاحة حاليًا في الداتابيز.</p>`;
-     return;
-  }
-  
-  playlistContainer.innerHTML = '';
-  SONGS.forEach(song => {
-    const songItem = document.createElement('div');
-    songItem.className = 'song-item';
-    songItem.setAttribute('data-id', song.id);
-    songItem.innerHTML = `
-      <img class="song-thumb" src="${song.cover}" alt="${song.title}">
-      <div class="song-meta">
-        <div class="song-name">${song.title}</div>
-        <div class="song-singer">${song.artist.split('·')[0]}</div>
-      </div>
-      <div class="now-playing-dot"></div>
-    `;
-    
-    songItem.addEventListener('click', () => {
-      loadSong(song);
-      audio.play().then(() => {
-        playBtn.classList.add('playing');
-        coverImg.classList.add('spinning');
-      });
-    });
-    
-    playlistContainer.appendChild(songItem);
-  });
-}
-
-function loadSong(song) {
-  currentSong = song;
-  audio.src = song.src;
-  audio.volume = volSlider.value / 100;
-  coverImg.src = song.cover;
-  dispTitle.textContent = song.title;
-  dispArtist.textContent = song.artist;
-  bigTitle.textContent = song.title;
-  bigArtist.textContent = song.artist;
-  
-  progInner.style.width = '0%';
-  progThumb.style.left = '0%';
-  curTime.textContent = '0:00';
-  totTime.textContent = '0:00';
-  coverImg.classList.remove('spinning');
-  playBtn.classList.remove('playing');
-
-  lyricsBox.innerHTML = '';
-  song.lyrics.forEach((line, i) => {
-    const span = document.createElement('span');
-    span.className = 'lyric-line';
-    span.dataset.index = i;
-    span.textContent = line;
-    lyricsBox.appendChild(span);
-  });
-  lyricsBox.scrollTop = 0;
-
-  document.querySelectorAll('.song-item').forEach(el => el.classList.remove('active'));
-  const activeItem = document.querySelector(`.song-item[data-id="${song.id}"]`);
-  if (activeItem) activeItem.classList.add('active');
-
-  noSong.style.display = 'none';
-  playerUI.style.display = 'flex';
-}
-
-function playPause() {
-  if (!currentSong) return;
-  if (audio.paused) {
-    audio.play();
-    playBtn.classList.add('playing');
-    coverImg.classList.add('spinning');
-  } else {
-    audio.pause();
-    playBtn.classList.remove('playing');
-    coverImg.classList.remove('spinning');
-  }
-}
-
-playBtn.addEventListener('click', playPause);
-
-function getPct(e, el) {
-  const rect = el.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  // تعديل نسبة السحب الحسابية لتتوافق مع اتجاه RTL
-  return Math.max(0, Math.min(1, (rect.right - clientX) / rect.width));
-}
-
-progOuter.addEventListener('mousedown', e => {
-  isDragging = true;
-  const pct = getPct(e, progOuter);
-  setProgress(pct);
-});
-
-document.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  const pct = getPct(e, progOuter);
-  setProgress(pct);
-});
-
-document.addEventListener('mouseup', e => {
-  if (!isDragging) return;
-  isDragging = false;
-  const pct = getPct(e, progOuter);
-  if (audio.duration) audio.currentTime = pct * audio.duration;
-});
-
-progOuter.addEventListener('touchstart', e => {
-  const pct = getPct(e, progOuter);
-  if (audio.duration) audio.currentTime = pct * audio.duration;
-}, {passive:true});
-
-function setProgress(pct) {
-  progInner.style.width = (pct * 100) + '%';
-  progThumb.style.left = (pct * 100) + '%';
-  curTime.textContent = fmt(pct * (audio.duration || 0));
-}
-
-audio.addEventListener('timeupdate', () => {
-  if (isDragging || !audio.duration) return;
-  const pct = audio.currentTime / audio.duration;
-  setProgress(pct);
-  curTime.textContent = fmt(audio.currentTime);
-
-  const lines = lyricsBox.querySelectorAll('.lyric-line');
-  const n = lines.length;
-  if (!n) return;
-  
-  const idx = Math.min(Math.floor(pct * n), n - 1);
-  lines.forEach((l, i) => {
-    l.classList.remove('active', 'past');
-    if (i === idx) {
-      l.classList.add('active');
-      if (lyricsToggle.checked) {
-        l.scrollIntoView({behavior:'smooth', block:'center'});
-      }
-    } else if (i < idx) {
-      l.classList.add('past');
-    }
-  });
-});
-
-audio.addEventListener('loadedmetadata', () => {
-  totTime.textContent = fmt(audio.duration);
-});
-
-audio.addEventListener('ended', () => {
-  if (isRepeat) { 
-    audio.currentTime = 0; 
-    audio.play(); 
-  } else { 
-    playBtn.classList.remove('playing'); 
-    coverImg.classList.remove('spinning'); 
+    console.error("Error adding document: ", error);
+    statusMsg.textContent = "عذرًا، حدث خطأ أثناء الاتصال بالسيرفر. يرجى المحاولة لاحقًا.";
+    statusMsg.classList.add('error');
+    statusMsg.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "نشر الأغنية الآن 🚀";
   }
 });
-
-document.getElementById('b10').addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 10); });
-document.getElementById('f10').addEventListener('click', () => { audio.currentTime = Math.min(audio.duration||0, audio.currentTime + 10); });
-document.getElementById('b5').addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 5); });
-document.getElementById('f30').addEventListener('click', () => { audio.currentTime = Math.min(audio.duration||0, audio.currentTime + 30); });
-
-volSlider.addEventListener('input', () => {
-  audio.volume = volSlider.value / 100;
-  volVal.textContent = volSlider.value + '%';
-});
-
-repeatBtn.addEventListener('click', () => {
-  isRepeat = !isRepeat;
-  repeatBtn.classList.toggle('active', isRepeat);
-  repeatLabel.classList.toggle('show', isRepeat);
-});
-
-lyricsToggle.addEventListener('change', () => {
-  if (lyricsToggle.checked) {
-    lyricsBox.classList.add('show');
-    lyricsHint.textContent = 'اضغط للإخفاء';
-    const activeLine = lyricsBox.querySelector('.lyric-line.active');
-    if(activeLine) activeLine.scrollIntoView({block:'center'});
-  } else {
-    lyricsBox.classList.remove('show');
-    lyricsHint.textContent = 'اضغط للعرض';
-  }
-});
-
-document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') return;
-  if (e.code === 'Space') { e.preventDefault(); playPause(); }
-  if (e.code === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 10);
-  if (e.code === 'ArrowRight') audio.currentTime = Math.min(audio.duration||0, audio.currentTime + 10);
-});
-
-fetchSongsFromFirebase();
 </script>
 </body>
 </html>
