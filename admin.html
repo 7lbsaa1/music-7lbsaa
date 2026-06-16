@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم الموسيقى — إضافة أغنية جديدة</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Tajawal','Inter',sans-serif; background:#0d0d11; color:#fff; min-height:100vh; padding: 40px 20px; }
+
+  .admin-container {
+    max-width: 650px;
+    margin: 0 auto;
+    background: #14141f;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  h1 span { color: #e85d5d; }
+  
+  p.subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 32px;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+    text-align: right;
+  }
+
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: rgba(255,255,255,0.8);
+  }
+
+  input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.25s ease;
+    outline: none;
+  }
+
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    border-color: #e85d5d;
+    background: rgba(232,93,93,0.03);
+    box-shadow: 0 0 10px rgba(232,93,93,0.1);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 6px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: #e85d5d;
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(232,93,93,0.3);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-top: 10px;
+  }
+
+  .submit-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 28px rgba(232,93,93,0.4);
+  }
+
+  .submit-btn:disabled {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.3);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* رسائل النجاح والخطأ */
+  .status-msg {
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    display: none;
+    text-align: center;
+  }
+  .status-msg.success {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+  }
+  .status-msg.error {
+    background: rgba(232, 93, 93, 0.1);
+    color: #e85d5d;
+    border: 1px solid rgba(232, 93, 93, 0.2);
+  }
+
+  .view-site-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+  }
+  .view-site-link:hover { color: #e85d5d; }
+</style>
+</head>
+<body>
+
+<div class="admin-container">
+  <a class="view-site-link" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    الذهاب للموقع الأساسي للموسيقى
+  </a>
+
+  <h1>لوحة التحكم <span>7lbsaa</span></h1>
+  <p class="subtitle">قم بملء البيانات بالأسفل لنشر أغنية جديدة مباشرة في قاعدة البيانات</p>
+
+  <div id="statusMsg" class="status-msg"></div>
+
+  <form id="uploadForm">
+    <div class="form-group">
+      <label for="songId">معرّف الأغنية (ID رقمي)</label>
+      <input type="number" id="songId" placeholder="مثال: 3 (يستخدم للترتيب في القائمة)" required>
+    </div>
+
+    <div class="form-group">
+      <label for="songTitle">اسم الأغنية</label>
+      <input type="text" id="songTitle" placeholder="أدخل اسم الأغنية هنا" required>
+    </div>
+
+    <div class="form-group">
+      <label for="songArtist">اسم الفنان / الألبوم</label>
+      <input type="text" id="songArtist" placeholder="مثال: عمرو دياب · أحلى وأحلى" required>
+      <div class="hint">يمكنك الفصل بين الفنان والألبوم بعلامة النقطة الوسطى ( · ) لتظهر بشكل منسق.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="songSrc">رابط ملف الصوت (URL أو مسار الملف)</label>
+      <input type="text" id="songSrc" placeholder="مثال: music/song.mp3 أو رابط سحابي مباشر" required>
+    </div>
+
+    <div class="form-group">
+      <label for="songCover">رابط صورة الغلاف (URL أو مسار الصورة)</label>
+      <input type="text" id="songCover" placeholder="مثال: images/cover.jpg أو رابط ويب مباشر لصورة الغلاف" required>
+    </div>
+
+    <div class="form-group">
+      <label for="songLyrics">كلمات الأغنية (كل سطر في سطر منفصل)</label>
+      <textarea id="songLyrics" placeholder="اكتب أو الصق كلمات الأغنية هنا...&#10;اضغط Enter بعد كل سطر لمزامنة الكلمات بشكل سليم."></textarea>
+    </div>
+
+    <button type="submit" id="submitBtn" class="submit-btn">نشر الأغنية الآن 🚀</button>
+  </form>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// إعدادات الـ Firebase الخاصة بك والمربوطة بالمشغل الرئيسي
+const firebaseConfig = {
+  apiKey: "AIzaSyCk9l8XNO4y-6qnaOqKsfAKQPbaemOOHrU",
+  authDomain: "students-d06e7.firebaseapp.com",
+  projectId: "students-d06e7",
+  storageBucket: "students-d06e7.firebasestorage.app",
+  messagingSenderId: "932035308750",
+  appId: "1:932035308750:web:781364ca90256bca80749f",
+  measurementId: "G-6VBEFTCHVG"
+};
+
+// تهيئة Firebase و Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const uploadForm = document.getElementById('uploadForm');
+const statusMsg = document.getElementById('statusMsg');
+const submitBtn = document.getElementById('submitBtn');
+
+// عند الضغط على زر "نشر الأغنية"
+uploadForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // تعطيل الزر لتجنب التكرار أثناء الرفع
+  submitBtn.disabled = true;
+  submitBtn.textContent = "جاري النشر وحفظ البيانات...";
+  
+  // إخفاء أي رسائل حالة قديمة
+  statusMsg.style.display = 'none';
+  statusMsg.className = 'status-msg';
+
+  // تجميع البيانات وتجهيز الكلمات كمصفوفة (Array) عبر تقسيمها بكل سطر جديد
+  const rawLyrics = document.getElementById('songLyrics').value;
+  const lyricsArray = rawLyrics.split('\n').map(line => line.trim()).filter(line => line !== "");
+
+  const songData = {
+    id: parseInt(document.getElementById('songId').value),
+    title: document.getElementById('songTitle').value.trim(),
+    artist: document.getElementById('songArtist').value.trim(),
+    src: document.getElementById('songSrc').value.trim(),
+    cover: document.getElementById('songCover').value.trim(),
+    lyrics: lyricsArray
+  };
+
+  try {
+    // إرسال البيانات فورًا لكولكشن 'songs' في الفايربيز
+    await addDoc(collection(db, "songs"), songData);
+    
+    // إظهار رسالة النجاح
+    statusMsg.textContent = "تم نشر الأغنية بنجاح! ستظهر فورًا في موقعك الأساسي. 🎉";
+    statusMsg.classList.add('success');
+    statusMsg.style.display = 'block';
+    
+    // إعادة تصفير الفورم لإضافة أغنية أخرى
+    uploadForm.reset();
+  } catch (error) {
+    console.error("خطأ أثناء النشر: ", error);
+    statusMsg.textContent = "عذرًا، حدث خطأ أثناء الاتصال بالسيرفر. يرجى المحاولة لاحقًا.";
+    statusMsg.classList.add('error');
+    statusMsg.style.display = 'block';
+  } finally {
+    // إعادة تفعيل الزر مجددًا
+    submitBtn.disabled = false;
+    submitBtn.textContent = "نشر الأغنية الآن 🚀";
+  }
+});
+</script>
+</body>
+</html>
